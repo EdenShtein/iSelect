@@ -13,6 +13,8 @@ public class User {
     private String role;
     private String fullName;
 
+    public User(){}
+
     public User(String email,String role,String fullName){
         this.email = email;
         this.role = role;

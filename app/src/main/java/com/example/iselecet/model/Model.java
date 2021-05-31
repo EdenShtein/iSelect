@@ -35,8 +35,22 @@ public class Model {
         void onComplete(String data);
     }
 
-    public void getOwnerId(String userId, StringListener data) {
+    public void getUserRole(String userId, StringListener data) {
         fireBase.getUserRole(userId,data);
+    }
+
+    public interface SuccessListener{
+        void onComplete(boolean result);
+    }
+    public void logInFB(String email,String password, SuccessListener listener) {
+        fireBase.logInToFireBase(email,password,mActivity, listener);
+    }
+    public String getCurrentUserId(){
+        return fireBase.getCurrentUserId();
+    }
+
+    public void signOutFB(){
+        fireBase.signOutFromFireBase();
     }
 
 

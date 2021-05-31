@@ -77,6 +77,33 @@ public class FireBaseModel {
                 });
     }
 
+    public void logInToFireBase (String email, String password, Activity activity, Model.SuccessListener listener){
+        mAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(activity, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d("TAG", "signInWithEmail:success");
+                            Toast.makeText(activity, "Sign In was Successfully", Toast.LENGTH_SHORT).show();
+                            listener.onComplete(true);
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w("TAG", "signInWithEmail:failure", task.getException());
+                            listener.onComplete(false);
+                        }
+                    }
+                });
+    }
+
+    public void signOutFromFireBase (){
+        mAuth.signOut();
+    }
+
+    public String getCurrentUserId(){
+        return mAuth.getCurrentUser().getUid();
+    }
+
 
 
 }
