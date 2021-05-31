@@ -13,6 +13,12 @@
         <action
             android:id="@+id/action_login_to_signUp"
             app:destination="@id/signUpFragment" />
+        <action
+            android:id="@+id/action_login_to_doctorView"
+            app:destination="@id/doctorViewFragment" />
+        <action
+            android:id="@+id/action_login_to_patientView"
+            app:destination="@id/patientViewFragment" />
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"
@@ -23,4 +29,14 @@
             android:id="@+id/action_signUp_to_login"
             app:destination="@id/loginFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/doctorViewFragment"
+        android:name="com.example.iselecet.DoctorViewFragment"
+        android:label="fragment_doctor_view"
+        tools:layout="@layout/fragment_doctor_view" />
+    <fragment
+        android:id="@+id/patientViewFragment"
+        android:name="com.example.iselecet.PatientViewFragment"
+        android:label="fragment_patient_view"
+        tools:layout="@layout/fragment_patient_view" />
 </navigation>
