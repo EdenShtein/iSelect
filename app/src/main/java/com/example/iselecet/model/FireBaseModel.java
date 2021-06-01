@@ -47,34 +47,75 @@ public class FireBaseModel {
 
 
     public void addUser(User user, final Model.AddUserListener listener) {
-        db.collection("Users").document(user.getId())
-                .set(user.toMap()).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                Log.d("TAG","User added successfully");
-                listener.onComplete();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.d("TAG","fail adding User");
-                listener.onComplete();
-            }
-        });
+        if(user.getRole().equals("Doctor")){
+            db.collection("Doctors").document(user.getId())
+                    .set(user.toMap()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    Log.d("TAG","User added successfully");
+                    listener.onComplete();
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.d("TAG","fail adding User");
+                    listener.onComplete();
+                }
+            });
+        }
+        else{
+            db.collection("Patients").document(user.getId())
+                    .set(user.toMap()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    Log.d("TAG","User added successfully");
+                    listener.onComplete();
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.d("TAG","fail adding User");
+                    listener.onComplete();
+                }
+            });
+        }
+
     }
 
+
     public void getUserRole(String userId, Model.StringListener listener) {
-        db.collection("Users").document(userId).get()
+
+        db.collection("Doctors").document(userId).get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                         if (task.isSuccessful()) {
                             DocumentSnapshot doc = task.getResult();
-                            String role = doc.getString("role");
-                            listener.onComplete(role);
+                            if(doc.exists()){
+                                String role = doc.getString("role");
+                                listener.onComplete(role);
+                            }
+                            else{
+                                db.collection("Patients").document(userId).get()
+                                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                if (task.isSuccessful()) {
+                                                    DocumentSnapshot doc = task.getResult();
+                                                    String role = doc.getString("role");
+                                                    listener.onComplete(role);
+                                                }
+                                            }
+                                        });
+                            }
+
                         }
                     }
                 });
+
+
+
+
     }
 
     public void logInToFireBase (String email, String password, Activity activity, Model.SuccessListener listener){

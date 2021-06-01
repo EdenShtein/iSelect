@@ -18,6 +18,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.iselecet.model.Model;
+import com.example.iselecet.model.user.Doctor;
+import com.example.iselecet.model.user.Patient;
 import com.example.iselecet.model.user.User;
 
 
@@ -66,6 +68,7 @@ public class SignUpFragment extends Fragment {
                 String rpassword = rePassword.getText().toString();
                 String fullname = fullName.getText().toString();
                 Boolean switchState = doctorSwitch.isChecked();
+                User user;
                 String role = "Patient";
                 if(switchState){
                     role = "Doctor";
@@ -79,9 +82,17 @@ public class SignUpFragment extends Fragment {
                 if(!(userpassword.equals(rpassword))) {
                     Toast.makeText(getActivity(),"Password are not the same",Toast.LENGTH_SHORT).show();
                 }else{
-                    final User user = new User(useremail,role,fullname);
+                    if(role.equals("Doctor")){
+                         user = new Doctor(useremail,role,fullname);
+
+                    }
+                    else{
+                        user = new Patient(useremail,role,fullname);
+
+                    }
                     Model.instance.signUpFB(user,userpassword);
                     Navigation.findNavController(view).navigate(R.id.action_signUp_to_login);
+
                 }
 
 
