@@ -3,7 +3,6 @@ package com.example.iselecet;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavAction;
 import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
@@ -14,7 +13,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.iselecet.model.Model;
+import com.example.iselecet.model.user.Doctor;
+import com.example.iselecet.model.user.Patient;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,10 +28,10 @@ public class DoctorMeetingFragment extends Fragment {
 
     TextView doctorTitle;
     TextView doctorSubTitle;
-
+    ArrayList<Patient> patientArrayList;
     String doctorId;
 
-    Button makeAppoitment;
+    Button makeAppoinment;
 
     Map<String, Object> editDoctorMap;
 
@@ -42,7 +44,7 @@ public class DoctorMeetingFragment extends Fragment {
         close = view.findViewById(R.id.doctor_meeting_close_btn);
         doctorTitle = view.findViewById(R.id.doctor_title);
         doctorSubTitle = view.findViewById(R.id.doctor_sub_title);
-        makeAppoitment = view.findViewById(R.id.appoint_btn);
+        makeAppoinment = view.findViewById(R.id.appoint_btn);
 
         close.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,26 +53,44 @@ public class DoctorMeetingFragment extends Fragment {
             }
         });
 
+        patientArrayList = new ArrayList<>();
+
         doctorTitle.setText(DoctorMeetingFragmentArgs.fromBundle(getArguments()).getFullName());
         doctorSubTitle.setText(DoctorMeetingFragmentArgs.fromBundle(getArguments()).getEmail());
 
         doctorId = DoctorMeetingFragmentArgs.fromBundle(getArguments()).getId();
 
-        makeAppoitment.setOnClickListener(new View.OnClickListener() {
+        makeAppoinment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 editDoctorMap = new HashMap<>();
                 editDoctorMap.put("isAvailable",false);
-                Model.instance.updateDoctorAvailable(doctorId, editDoctorMap, new Model.SuccessListener() {
-                    @Override
-                    public void onComplete(boolean result) {
-                        if(result){
-                            Navigation.findNavController(view).popBackStack();                        }
-                        else{
 
-                        }
+                String patientId = Model.instance.getCurrentUserId();
+                Model.instance.getPatientData(patientId, new Model.PatientListener() {
+                    @Override
+                    public void onComplete(Patient patient) {
+                        Model.instance.getDoctorData(doctorId, new Model.DoctorListener() {
+                            @Override
+                            public void onComplete(Doctor doctor) {
+                                patientArrayList = doctor.getPatientList();
+                                patientArrayList.add(patient);
+                                editDoctorMap.put("patientList",patientArrayList);
+                                Model.instance.updateDoctorAvailable(doctorId, editDoctorMap, new Model.SuccessListener() {
+                                    @Override
+                                    public void onComplete(boolean result) {
+                                        if(result){
+                                            Navigation.findNavController(view).popBackStack();                        }
+                                        else{
+
+                                        }
+                                    }
+                                });
+                            }
+                        });
                     }
                 });
+
             }
         });
 

@@ -3,6 +3,7 @@ package com.example.iselecet.model;
 import android.app.Activity;
 
 import com.example.iselecet.model.user.Doctor;
+import com.example.iselecet.model.user.Patient;
 import com.example.iselecet.model.user.User;
 
 import java.util.ArrayList;
@@ -65,7 +66,23 @@ public class Model {
     }
 
     public void updateDoctorAvailable(String doctorId, Map map, SuccessListener listener){
-        fireBase.updateDoctorAvailable(doctorId,map,listener);
+        fireBase.updateDoctor(doctorId,map,listener);
+    }
+
+    public interface PatientListener {
+        void onComplete(Patient patient);
+    }
+
+    public void getPatientData(String patientId, PatientListener listener){
+        fireBase.getPatientData(patientId,listener);
+    }
+
+    public interface DoctorListener {
+        void onComplete(Doctor doctor);
+    }
+
+    public void getDoctorData(String doctorId, DoctorListener listener){
+        fireBase.getDoctorData(doctorId,listener);
     }
 
 

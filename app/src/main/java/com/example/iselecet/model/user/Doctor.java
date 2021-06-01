@@ -5,12 +5,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Doctor extends User {
+
     ArrayList<Patient> patientList;
     Boolean isAvailable;
 
     public Doctor(String email, String role, String fullName) {
         super(email, role, fullName);
         this.isAvailable = true;
+        this.patientList = new ArrayList<>();
     }
 
     public Doctor(){}
@@ -24,6 +26,7 @@ public class Doctor extends User {
         result.put("fullName", getFullName());
         result.put("role", getRole());
         result.put("isAvailable",isAvailable);
+        result.put("patientList",patientList);
         return result;
     }
 
@@ -34,6 +37,7 @@ public class Doctor extends User {
         this.setFullName((String)map.get("fullName"));
         this.setRole((String)map.get("role"));
         this.isAvailable = (Boolean)map.get("isAvailable");
+        this.patientList = (ArrayList<Patient>)map.get("patientList");
     }
 
     public ArrayList<Patient> getPatientList() {

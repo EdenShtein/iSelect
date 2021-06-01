@@ -7,6 +7,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.example.iselecet.model.user.Doctor;
+import com.example.iselecet.model.user.Patient;
 import com.example.iselecet.model.user.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -20,8 +21,6 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 import static android.content.ContentValues.TAG;
@@ -172,7 +171,7 @@ public class FireBaseModel {
         });
     }
 
-    public void updateDoctorAvailable(String doctorId, Map<String,Object> map, Model.SuccessListener listener) {
+    public void updateDoctor(String doctorId, Map<String,Object> map, Model.SuccessListener listener) {
         db.collection("Doctors").document(doctorId)
                 .update(map).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
@@ -185,6 +184,38 @@ public class FireBaseModel {
             }
         });
     }
+
+    public void getPatientData(String patientId, Model.PatientListener listener) {
+        db.collection("Patients").document(patientId).get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot doc = task.getResult();
+                            Patient patient = new Patient();
+                            patient.fromMap(doc.getData());
+                            listener.onComplete(patient);
+                        }
+                    }
+                });
+    }
+
+    public void getDoctorData(String doctorId, Model.DoctorListener listener) {
+        db.collection("Doctors").document(doctorId).get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot doc = task.getResult();
+                            Doctor doctor = new Doctor();
+                            doctor.fromMap(doc.getData());
+                            listener.onComplete(doctor);
+                        }
+                    }
+                });
+    }
+
+
 
 
 
