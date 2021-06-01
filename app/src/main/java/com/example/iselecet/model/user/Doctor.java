@@ -13,6 +13,8 @@ public class Doctor extends User {
         this.isAvailable = true;
     }
 
+    public Doctor(){}
+
 
     @Override
     public Map<String, Object> toMap() {
@@ -23,5 +25,30 @@ public class Doctor extends User {
         result.put("role", getRole());
         result.put("isAvailable",isAvailable);
         return result;
+    }
+
+    @Override
+    public void fromMap(Map<String, Object> map) {
+        this.setId((String)map.get("id"));
+        this.setEmail((String)map.get("email"));
+        this.setFullName((String)map.get("fullName"));
+        this.setRole((String)map.get("role"));
+        this.isAvailable = (Boolean)map.get("isAvailable");
+    }
+
+    public ArrayList<Patient> getPatientList() {
+        return patientList;
+    }
+
+    public void setPatientList(ArrayList<Patient> patientList) {
+        this.patientList = patientList;
+    }
+
+    public Boolean getAvailable() {
+        return isAvailable;
+    }
+
+    public void setAvailable(Boolean available) {
+        isAvailable = available;
     }
 }

@@ -2,6 +2,8 @@ package com.example.iselecet.model.user;
 
 
 
+import com.google.firebase.Timestamp;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -28,6 +30,12 @@ public class User {
         result.put("fullName", fullName);
         result.put("role", role);
         return result;
+    }
+    public void fromMap(Map<String, Object> map) {
+        id = (String)map.get("id");
+        email = (String)map.get("email");
+        fullName = (String)map.get("fullName");
+        role = (String)map.get("role");
     }
 
     public String getId() {

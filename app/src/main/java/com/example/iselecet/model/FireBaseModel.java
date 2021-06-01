@@ -6,6 +6,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.example.iselecet.model.user.Doctor;
 import com.example.iselecet.model.user.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -15,7 +16,13 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 import static android.content.ContentValues.TAG;
 
@@ -143,6 +150,40 @@ public class FireBaseModel {
 
     public String getCurrentUserId(){
         return mAuth.getCurrentUser().getUid();
+    }
+
+    public void getAllDoctors(final Model.ListListener listener){
+        ArrayList<Doctor> doctorsList = new ArrayList<>();
+        db.collection("Doctors").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    if (task.getResult().isEmpty() == false) {
+                        for (DocumentSnapshot doc : task.getResult()) {
+                            Doctor doctor = new Doctor();
+                            doctor.fromMap(doc.getData());
+                            doctorsList.add(doctor);
+                            Log.d("TAG","game: " + doctor.getId());
+                        }
+                    }
+                }
+                listener.onComplete(doctorsList);
+            }
+        });
+    }
+
+    public void updateDoctorAvailable(String doctorId, Map<String,Object> map, Model.SuccessListener listener) {
+        db.collection("Doctors").document(doctorId)
+                .update(map).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    listener.onComplete(true);
+                } else {
+                    listener.onComplete(false);
+                }
+            }
+        });
     }
 
 

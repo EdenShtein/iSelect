@@ -33,10 +33,39 @@
         android:id="@+id/doctorViewFragment"
         android:name="com.example.iselecet.DoctorViewFragment"
         android:label="fragment_doctor_view"
-        tools:layout="@layout/fragment_doctor_view" />
+        tools:layout="@layout/fragment_doctor_view" >
+        <action
+            android:id="@+id/action_doctorView_to_login"
+            app:destination="@id/loginFragment" />
+    </fragment>
     <fragment
         android:id="@+id/patientViewFragment"
         android:name="com.example.iselecet.PatientViewFragment"
         android:label="fragment_patient_view"
-        tools:layout="@layout/fragment_patient_view" />
+        tools:layout="@layout/fragment_patient_view" >
+        <action
+            android:id="@+id/action_patientView_to_login"
+            app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_patientView_to_doctorMeeting"
+            app:destination="@id/doctorMeetingFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/doctorMeetingFragment"
+        android:name="com.example.iselecet.DoctorMeetingFragment"
+        android:label="fragment_doctor_meeting"
+        tools:layout="@layout/fragment_doctor_meeting" >
+        <argument
+            android:name="id"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="fullName"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="email"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
 </navigation>

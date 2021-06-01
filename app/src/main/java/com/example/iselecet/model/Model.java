@@ -2,7 +2,11 @@ package com.example.iselecet.model;
 
 import android.app.Activity;
 
+import com.example.iselecet.model.user.Doctor;
 import com.example.iselecet.model.user.User;
+
+import java.util.ArrayList;
+import java.util.Map;
 
 public class Model {
 
@@ -51,6 +55,17 @@ public class Model {
 
     public void signOutFB(){
         fireBase.signOutFromFireBase();
+    }
+
+    public interface ListListener<E>{
+        void onComplete(ArrayList<E> result);
+    }
+    public void getAllDoctors(ListListener<Doctor> listener){
+        fireBase.getAllDoctors(listener);
+    }
+
+    public void updateDoctorAvailable(String doctorId, Map map, SuccessListener listener){
+        fireBase.updateDoctorAvailable(doctorId,map,listener);
     }
 
 
