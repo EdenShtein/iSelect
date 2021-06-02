@@ -1,7 +1,16 @@
 package com.example.iselecet;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.media.RingtoneManager;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -26,6 +35,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
 
 
 public class DoctorMeetingFragment extends Fragment {
@@ -117,6 +127,9 @@ public class DoctorMeetingFragment extends Fragment {
                                             if (patientArrayList.size() == 0 && doctor.getCurrentPatient()==null) {
                                                 Toast.makeText(getActivity(), "You're first in line, you're welcome to see a doctor",
                                                         Toast.LENGTH_SHORT).show();
+                                                Intent intent = new Intent(getActivity().getApplicationContext(), MainActivity.class);
+                                                showNotification(getContext(),"You're first in line, you're welcome to see a doctor"
+                                                ,intent);
                                                 Date date = new Date();
                                                 patient.setArrivedAt(formatter.format(date));
                                                 editDoctorMap.put("currentPatient",patient);
@@ -247,5 +260,28 @@ public class DoctorMeetingFragment extends Fragment {
         });
 
         return view;
+    }
+
+    public void showNotification(Context context, String message, Intent intent) {
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 1, intent, PendingIntent.FLAG_ONE_SHOT);
+        String CHANNEL_ID = "channel_name";
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context, CHANNEL_ID)
+                .setSmallIcon(R.drawable.iselect_logo)
+                .setContentTitle("iSelect")
+                .setContentText(message)
+                .setAutoCancel(true)
+                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+                .setContentIntent(pendingIntent);
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "Channel Name";
+            int importance = NotificationManager.IMPORTANCE_HIGH;
+            NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, name, importance);
+            notificationManager.createNotificationChannel(mChannel);
+        }
+        notificationManager.notify(1, notificationBuilder.build()); //
+
+
     }
 }
