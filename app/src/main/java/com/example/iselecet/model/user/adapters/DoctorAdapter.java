@@ -65,6 +65,7 @@ public class DoctorAdapter extends RecyclerView.Adapter<DoctorAdapter.DoctorHold
     public static class DoctorHolder extends RecyclerView.ViewHolder{
         TextView doctorName;
         TextView email;
+        TextView available;
         ImageView doctorImage;
         int position;
 
@@ -73,6 +74,7 @@ public class DoctorAdapter extends RecyclerView.Adapter<DoctorAdapter.DoctorHold
             doctorImage = itemView.findViewById(R.id.main_photo);
             doctorName = itemView.findViewById(R.id.title_listorw);
             email = itemView.findViewById(R.id.subtitle_listrow);
+            available = itemView.findViewById(R.id.subtitle_listrow2);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -88,6 +90,12 @@ public class DoctorAdapter extends RecyclerView.Adapter<DoctorAdapter.DoctorHold
         public void bindData(Doctor doctor, int position){
             doctorName.setText(doctor.getFullName());
             email.setText(doctor.getEmail());
+            if(doctor.getAvailable()){
+                available.setText("Doctor Is Available");
+            }
+            else{
+                available.setText("Doctor Is Not Available");
+            }
             doctorImage.setImageResource(R.drawable.person_icon);
             this.position = position;
         }

@@ -93,7 +93,7 @@
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         <ImageView
-            android:id="@+id/mainfeed_price_sort"
+            android:id="@+id/main_sort"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="40dp"
@@ -113,7 +113,7 @@
             android:scaleType="fitXY"
             android:src="@android:drawable/ic_menu_sort_alphabetically"
             app:layout_constraintBottom_toTopOf="@+id/mainfeed_refresh_layout"
-            app:layout_constraintStart_toEndOf="@+id/mainfeed_price_sort"
+            app:layout_constraintStart_toEndOf="@+id/main_sort"
             app:layout_constraintTop_toBottomOf="@+id/main_signout"
             app:layout_constraintVertical_bias="0.608" />
 

@@ -2,8 +2,10 @@ package com.example.iselecet;
 
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
@@ -23,6 +25,8 @@ import com.example.iselecet.model.user.Doctor;
 import com.example.iselecet.model.user.adapters.DoctorAdapter;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 
@@ -33,6 +37,9 @@ public class PatientViewFragment extends Fragment {
     SwipeRefreshLayout swipeRefreshLayout;
     DoctorAdapter doctorAdapter;
     ImageView signout;
+    ImageView availableSort;
+
+
 
     CardView list_card;
 
@@ -47,6 +54,7 @@ public class PatientViewFragment extends Fragment {
 
         doctor_list = view.findViewById(R.id.main_rv);
         signout = view.findViewById(R.id.main_signout);
+        availableSort = view.findViewById(R.id.main_sort);
         doctor_list.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(view.getContext());
         doctor_list.setLayoutManager(layoutManager);
@@ -108,6 +116,33 @@ public class PatientViewFragment extends Fragment {
                 AlertDialog alert = alertBuilder.create();
                 alert.setTitle("Sign Out");
                 alert.show();
+            }
+        });
+
+        availableSort.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Model.instance.getAllDoctors(new Model.ListListener<Doctor>() {
+                    @RequiresApi(api = Build.VERSION_CODES.N)
+                    @Override
+                    public void onComplete(ArrayList<Doctor> result) {
+                        Collections.sort(result, new Comparator<Doctor>(){
+
+                            @Override
+                            public int compare(Doctor doctor1, Doctor doctor2){
+
+                                boolean b1 = doctor1.getAvailable();
+                                boolean b2 = doctor2.getAvailable();
+
+                                return (b1 != b2) ? (b1) ? -1 : 1 : 0;
+                            }
+                        });
+                        doctorAdapter.setDoctorData(result);
+                        doctor_list.setAdapter(doctorAdapter);
+                    }
+
+                });
+
             }
         });
 

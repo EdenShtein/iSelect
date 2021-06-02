@@ -95,6 +95,7 @@ public class DoctorMeetingFragment extends Fragment {
                                                 Toast.makeText(getActivity(), "You're first in line, you're welcome to see a doctor",
                                                         Toast.LENGTH_SHORT).show();
                                                 editDoctorMap.put("currentPatient",patient);
+                                                editDoctorMap.put("isAvailable",false);
                                                 Model.instance.updateDoctorAvailable(doctorId, editDoctorMap, new Model.SuccessListener() {
                                                     @Override
                                                     public void onComplete(boolean result) {
