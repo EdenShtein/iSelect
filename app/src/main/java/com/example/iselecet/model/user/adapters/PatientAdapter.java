@@ -65,6 +65,7 @@ public class PatientAdapter extends RecyclerView.Adapter<PatientAdapter.PatientH
     public static class PatientHolder extends RecyclerView.ViewHolder{
         TextView patientName;
         TextView email;
+        TextView textView;
         ImageView patientImage;
         int position;
 
@@ -73,6 +74,7 @@ public class PatientAdapter extends RecyclerView.Adapter<PatientAdapter.PatientH
             patientImage = itemView.findViewById(R.id.main_photo);
             patientName = itemView.findViewById(R.id.title_listorw);
             email = itemView.findViewById(R.id.subtitle_listrow);
+            textView = itemView.findViewById((R.id.subtitle_listrow2));
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -89,6 +91,7 @@ public class PatientAdapter extends RecyclerView.Adapter<PatientAdapter.PatientH
             patientName.setText(patient.getFullName());
             email.setText(patient.getEmail());
             patientImage.setImageResource(R.drawable.person_icon);
+            textView.setText("");
             this.position = position;
         }
     }

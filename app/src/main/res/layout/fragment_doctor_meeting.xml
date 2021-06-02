@@ -12,7 +12,7 @@
         android:id="@+id/cancel_app_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="68dp"
         android:backgroundTint="#4B5CBA"
         android:text="Cancel Appointment"
         android:textColor="#000000"
@@ -26,7 +26,7 @@
         android:layout_width="386dp"
         android:layout_height="185dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="8dp"
         android:background="@drawable/custom_border"
         android:backgroundTint="#4B5CBA"
@@ -77,13 +77,14 @@
             app:layout_constraintHorizontal_bias="0.387"
             app:layout_constraintStart_toEndOf="@+id/doctor_meeting_image"
             app:layout_constraintTop_toBottomOf="@+id/doctor_title" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <Button
         android:id="@+id/appoint_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="12dp"
         android:backgroundTint="#4B5CBA"
         android:text="Make Appointment"
         android:textColor="#000000"
@@ -112,5 +113,45 @@
         android:src="@android:drawable/ic_menu_close_clear_cancel"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/mainfeed_refresh_layout"
+        android:layout_width="402dp"
+        android:layout_height="249dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mainfeed_title_text2"
+        app:layout_constraintVertical_bias="0.737">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/main_rv"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="16dp"
+
+            tools:listitem="@layout/main_listrow" />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <TextView
+        android:id="@+id/mainfeed_title_text2"
+        android:layout_width="267dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="5dp"
+        android:fontFamily="sans-serif-black"
+        android:text="Patient Waiting List"
+        android:textColor="#000000"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.604"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cancel_app_btn" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
