@@ -228,6 +228,7 @@ public class FireBaseModel {
                             for(HashMap<String,String> m:hashList){
                                 Patient tmpPatient = new Patient(m.get("email"),m.get("role"),m.get("fullName"));
                                 tmpPatient.setId(m.get("id"));
+                                tmpPatient.setArrivedAt(m.get("arrivedAt"));
                                 patientList.add(tmpPatient);
                             }
                         }

@@ -11,7 +11,8 @@ public class Patient extends User{
     Date date = new Date();
 
     private Boolean isWaiting = false;
-    private long arrivalTime;
+
+    String arrivedAt;
 
 
     public Patient(){
@@ -30,6 +31,7 @@ public class Patient extends User{
         result.put("fullName", getFullName());
         result.put("role", getRole());
         result.put("isWaiting",isWaiting);
+        result.put("arrivedAt",formatter.format(date));
         return result;
     }
 
@@ -40,22 +42,31 @@ public class Patient extends User{
         this.setFullName((String)map.get("fullName"));
         this.setRole((String)map.get("role"));
         this.isWaiting = (Boolean)map.get("isWaiting");
+        this.arrivedAt = (String)map.get("arrivedAt");
     }
 
 
-    public Date getDate() {
+    /*public Date getDate() {
         return date;
     }
 
     public void setDate(Date date) {
         this.date = date;
     }
-
+*/
     public Boolean getWaiting() {
         return isWaiting;
     }
 
     public void setWaiting(Boolean waiting) {
         isWaiting = waiting;
+    }
+
+    public String getArrivedAt() {
+        return arrivedAt;
+    }
+
+    public void setArrivedAt(String arrivedAt) {
+        this.arrivedAt = arrivedAt;
     }
 }

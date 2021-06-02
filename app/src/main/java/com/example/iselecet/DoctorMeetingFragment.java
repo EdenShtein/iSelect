@@ -21,7 +21,9 @@ import com.example.iselecet.model.user.Doctor;
 import com.example.iselecet.model.user.Patient;
 import com.example.iselecet.model.user.adapters.PatientAdapter;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,7 +45,7 @@ public class DoctorMeetingFragment extends Fragment {
 
     HashMap patientHashMap;
     int i=0;
-
+    SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
     Map<String, Object> editDoctorMap;
 
     public RecyclerView patient_list;
@@ -115,6 +117,8 @@ public class DoctorMeetingFragment extends Fragment {
                                             if (patientArrayList.size() == 0 && doctor.getCurrentPatient()==null) {
                                                 Toast.makeText(getActivity(), "You're first in line, you're welcome to see a doctor",
                                                         Toast.LENGTH_SHORT).show();
+                                                Date date = new Date();
+                                                patient.setArrivedAt(formatter.format(date));
                                                 editDoctorMap.put("currentPatient",patient);
                                                 editDoctorMap.put("isAvailable",false);
                                                 Model.instance.updateDoctorAvailable(doctorId, editDoctorMap, new Model.SuccessListener() {
@@ -131,6 +135,8 @@ public class DoctorMeetingFragment extends Fragment {
                                                 });
                                             } else {
                                                 patient.setWaiting(true);
+                                                Date date = new Date();
+                                                patient.setArrivedAt(formatter.format(date));
                                                 patientArrayList.add(patient);
                                                 editDoctorMap.put("patientList", patientArrayList);
                                                 Model.instance.updateDoctorAvailable(doctorId, editDoctorMap, new Model.SuccessListener() {
