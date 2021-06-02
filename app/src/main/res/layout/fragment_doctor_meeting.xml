@@ -72,7 +72,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="58dp"
         android:backgroundTint="#4B5CBA"
-        android:text="Set Appotment"
+        android:text="Make Appointment"
         android:textColor="#000000"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
@@ -81,10 +81,11 @@
 
     <ImageView
         android:id="@+id/doctor_meeting_logo"
-        android:layout_width="151dp"
-        android:layout_height="110dp"
+        android:layout_width="173dp"
+        android:layout_height="96dp"
         android:layout_marginStart="68dp"
         android:layout_marginTop="44dp"
+        android:scaleType="center"
         android:src="@drawable/iselect_logo"
         app:layout_constraintStart_toEndOf="@+id/doctor_meeting_close_btn"
         app:layout_constraintTop_toTopOf="parent" />

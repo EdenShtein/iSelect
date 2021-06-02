@@ -19,6 +19,7 @@
             android:id="@+id/mainfeed_image"
             android:layout_width="193dp"
             android:layout_height="114dp"
+            android:scaleType="center"
             android:src="@drawable/iselect_logo"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

@@ -226,7 +226,7 @@ public class FireBaseModel {
                             DocumentSnapshot document = task.getResult();
                             ArrayList<HashMap<String,String>> hashList = (ArrayList<HashMap<String, String>>) document.get("patientList");
                             for(HashMap<String,String> m:hashList){
-                                Patient tmpPatient = new Patient(m.get("email"),m.get("role"),m.get("name"));
+                                Patient tmpPatient = new Patient(m.get("email"),m.get("role"),m.get("fullName"));
                                 tmpPatient.setId(m.get("id"));
                                 patientList.add(tmpPatient);
                             }
