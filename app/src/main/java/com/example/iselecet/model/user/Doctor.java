@@ -8,6 +8,7 @@ public class Doctor extends User {
 
     ArrayList<Patient> patientList;
     Boolean isAvailable;
+    HashMap currentPatient;
 
     public Doctor(String email, String role, String fullName) {
         super(email, role, fullName);
@@ -38,6 +39,7 @@ public class Doctor extends User {
         this.setRole((String)map.get("role"));
         this.isAvailable = (Boolean)map.get("isAvailable");
         this.patientList = (ArrayList<Patient>)map.get("patientList");
+        this.currentPatient = (HashMap) map.get("currentPatient");
     }
 
     public ArrayList<Patient> getPatientList() {
@@ -54,5 +56,13 @@ public class Doctor extends User {
 
     public void setAvailable(Boolean available) {
         isAvailable = available;
+    }
+
+    public HashMap getCurrentPatient() {
+        return currentPatient;
+    }
+
+    public void setCurrentPatient(HashMap currentPatient) {
+        this.currentPatient = currentPatient;
     }
 }

@@ -7,8 +7,8 @@
     android:layout_height="wrap_content"
     android:layout_marginTop="10dp"
     android:layout_marginBottom="10dp"
-    android:backgroundTint="#00FFFFFF"
-    app:cardBackgroundColor="#00FFFFFF">
+    android:backgroundTint="@android:color/transparent"
+    app:cardBackgroundColor="@android:color/transparent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraint_list"
