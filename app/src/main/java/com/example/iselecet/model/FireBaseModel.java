@@ -21,6 +21,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import static android.content.ContentValues.TAG;
@@ -211,6 +212,26 @@ public class FireBaseModel {
                             doctor.fromMap(doc.getData());
                             listener.onComplete(doctor);
                         }
+                    }
+                });
+    }
+
+    public void getDoctorWaitingList(String doctorId, Model.ListListener listener) {
+        ArrayList<Patient> patientList = new ArrayList<>();
+        db.collection("Doctors").document(doctorId).get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            ArrayList<HashMap<String,String>> hashList = (ArrayList<HashMap<String, String>>) document.get("patientList");
+                            for(HashMap<String,String> m:hashList){
+                                Patient tmpPatient = new Patient(m.get("email"),m.get("role"),m.get("name"));
+                                tmpPatient.setId(m.get("id"));
+                                patientList.add(tmpPatient);
+                            }
+                        }
+                        listener.onComplete(patientList);
                     }
                 });
     }

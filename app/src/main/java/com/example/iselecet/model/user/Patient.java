@@ -14,7 +14,9 @@ public class Patient extends User{
     private long arrivalTime;
 
 
-    public Patient(){}
+    public Patient(){
+
+    }
     public Patient(String email, String role, String fullName) {
         super(email, role, fullName);
     }

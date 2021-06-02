@@ -85,5 +85,9 @@ public class Model {
         fireBase.getDoctorData(doctorId,listener);
     }
 
+    public void getDoctorWaitingList(String doctorId, ListListener listener){
+        fireBase.getDoctorWaitingList(doctorId,listener);
+    }
+
 
 }

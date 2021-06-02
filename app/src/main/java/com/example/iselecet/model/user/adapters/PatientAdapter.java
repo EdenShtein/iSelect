@@ -11,7 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.iselecet.R;
-import com.example.iselecet.model.user.Doctor;
 import com.example.iselecet.model.user.Patient;
 
 import java.util.LinkedList;
@@ -31,12 +30,12 @@ public class PatientAdapter extends RecyclerView.Adapter<PatientAdapter.PatientH
         return patientData.get(position);
     }
 
-    public void setDoctorData(List<Patient> patients) {
+    public void setPatientData(List<Patient> patients) {
         this.patientData = patients;
         notifyDataSetChanged();
     }
 
-    // Create GameHolder for the adapter.
+    // Create PatientHolder for the adapter.
     @NonNull
     @Override
     public PatientHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

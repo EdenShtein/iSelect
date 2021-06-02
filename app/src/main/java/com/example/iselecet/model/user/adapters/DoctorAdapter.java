@@ -35,7 +35,7 @@ public class DoctorAdapter extends RecyclerView.Adapter<DoctorAdapter.DoctorHold
         notifyDataSetChanged();
     }
 
-    // Create GameHolder for the adapter.
+    // Create DoctorHolder for the adapter.
     @NonNull
     @Override
     public DoctorHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
