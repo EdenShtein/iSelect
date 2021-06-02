@@ -89,5 +89,9 @@ public class Model {
         fireBase.getDoctorWaitingList(doctorId,listener);
     }
 
+    public void isPatientExist(String doctorId,String patientId,SuccessListener listener){
+        fireBase.isPatientExist(doctorId,patientId,listener);
+    }
+
 
 }

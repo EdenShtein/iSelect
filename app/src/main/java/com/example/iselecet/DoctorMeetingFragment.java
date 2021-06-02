@@ -72,54 +72,66 @@ public class DoctorMeetingFragment extends Fragment {
         makeAppointment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                editDoctorMap = new HashMap<>();
-                editDoctorMap.put("isAvailable",false);
-
-                String patientId = Model.instance.getCurrentUserId();
-                Model.instance.getPatientData(patientId, new Model.PatientListener() {
+                Model.instance.isPatientExist(doctorId, patientId, new Model.SuccessListener() {
                     @Override
-                    public void onComplete(Patient patient) {
-                        Model.instance.getDoctorData(doctorId, new Model.DoctorListener() {
-                            @Override
-                            public void onComplete(Doctor doctor) {
-                                patientArrayList = doctor.getPatientList();
-                                if (patientArrayList.size() == 0 && doctor.getCurrentPatient()==null) {
-                                    Toast.makeText(getActivity(), "You're first in line, you're welcome to see a doctor",
-                                            Toast.LENGTH_SHORT).show();
-                                    editDoctorMap.put("currentPatient",patient);
-                                    Model.instance.updateDoctorAvailable(doctorId, editDoctorMap, new Model.SuccessListener() {
-                                        @Override
-                                        public void onComplete(boolean result) {
-                                            if (result) {
-                                                Navigation.findNavController(view).popBackStack();
-                                            } else {
-                                                Toast.makeText(getActivity(), "Something went wrong.....",
-                                                        Toast.LENGTH_SHORT).show();
-                                            }
+                    public void onComplete(boolean result) {
+                        if(result){
+                            Toast.makeText(getActivity(), "You're already in the line!",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                        else{
+                            editDoctorMap = new HashMap<>();
+                            editDoctorMap.put("isAvailable",false);
 
-                                        }
-                                    });
-                                } else {
-                                    patient.setWaiting(true);
-                                    patientArrayList.add(patient);
-                                    editDoctorMap.put("patientList", patientArrayList);
-                                    Model.instance.updateDoctorAvailable(doctorId, editDoctorMap, new Model.SuccessListener() {
+                            patientId = Model.instance.getCurrentUserId();
+                            Model.instance.getPatientData(patientId, new Model.PatientListener() {
+                                @Override
+                                public void onComplete(Patient patient) {
+                                    Model.instance.getDoctorData(doctorId, new Model.DoctorListener() {
                                         @Override
-                                        public void onComplete(boolean result) {
-                                            if (result) {
-                                                Navigation.findNavController(view).popBackStack();
-                                            } else {
-                                                Toast.makeText(getActivity(), "Something went wrong.....",
+                                        public void onComplete(Doctor doctor) {
+                                            patientArrayList = doctor.getPatientList();
+                                            if (patientArrayList.size() == 0 && doctor.getCurrentPatient()==null) {
+                                                Toast.makeText(getActivity(), "You're first in line, you're welcome to see a doctor",
                                                         Toast.LENGTH_SHORT).show();
-                                            }
+                                                editDoctorMap.put("currentPatient",patient);
+                                                Model.instance.updateDoctorAvailable(doctorId, editDoctorMap, new Model.SuccessListener() {
+                                                    @Override
+                                                    public void onComplete(boolean result) {
+                                                        if (result) {
+                                                            Navigation.findNavController(view).popBackStack();
+                                                        } else {
+                                                            Toast.makeText(getActivity(), "Something went wrong.....",
+                                                                    Toast.LENGTH_SHORT).show();
+                                                        }
 
+                                                    }
+                                                });
+                                            } else {
+                                                patient.setWaiting(true);
+                                                patientArrayList.add(patient);
+                                                editDoctorMap.put("patientList", patientArrayList);
+                                                Model.instance.updateDoctorAvailable(doctorId, editDoctorMap, new Model.SuccessListener() {
+                                                    @Override
+                                                    public void onComplete(boolean result) {
+                                                        if (result) {
+                                                            Navigation.findNavController(view).popBackStack();
+                                                        } else {
+                                                            Toast.makeText(getActivity(), "Something went wrong.....",
+                                                                    Toast.LENGTH_SHORT).show();
+                                                        }
+
+                                                    }
+                                                });
+                                            }
                                         }
                                     });
                                 }
-                            }
-                        });
+                            });
+                        }
                     }
                 });
+
 
             }
         });
@@ -140,13 +152,15 @@ public class DoctorMeetingFragment extends Fragment {
                             for(Patient patient : patientArrayList){
                                 if(patient.getId().equals(patientId)){
                                     patientArrayList.remove(patient);
+                                    i--;
                                     break;
+
                                 }else{
                                     i++;
 
                                 }
                             }
-                            if(i==patientArrayList.size()){
+                            if(i==patientArrayList.size() && i!=0){
                                 Toast.makeText(getActivity(), "You're not in the line!",
                                         Toast.LENGTH_SHORT).show();
                             }

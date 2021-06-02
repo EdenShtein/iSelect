@@ -236,6 +236,40 @@ public class FireBaseModel {
                 });
     }
 
+    public void isPatientExist(String doctorId, String patientId, Model.SuccessListener listener) {
+        db.collection("Doctors").document(doctorId).get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            Doctor doctor = new Doctor();
+                            doctor.fromMap(document.getData());
+                            boolean flag = false;
+                            if(doctor.getCurrentPatient()!=null){
+                                if(doctor.getCurrentPatient().get("id").equals(patientId)){
+                                    flag = true;
+                            }
+                           }
+                            ArrayList<HashMap<String,String>> hashList = (ArrayList<HashMap<String, String>>) document.get("patientList");
+                            for(HashMap<String,String> patient:hashList){
+                                if(patient.get("id").equals(patientId)){
+                                    flag = true;
+                                }
+
+                            }
+                            if(flag){
+                                listener.onComplete(true);
+                            }
+                            else{
+                                listener.onComplete(false);
+                            }
+                        }
+
+                    }
+                });
+    }
+
 
 
 

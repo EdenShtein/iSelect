@@ -109,7 +109,7 @@ public class DoctorViewFragment extends Fragment {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 Model.instance.signOutFB();
-                                Navigation.findNavController(view).navigate(R.id.action_patientView_to_login);
+                                Navigation.findNavController(view).navigate(R.id.action_doctorView_to_login);
                             }
                         });
                 AlertDialog alert = alertBuilder.create();
