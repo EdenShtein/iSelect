@@ -7,6 +7,7 @@ import com.example.iselecet.model.user.Patient;
 import com.example.iselecet.model.user.User;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 public class Model {
@@ -65,7 +66,7 @@ public class Model {
         fireBase.getAllDoctors(listener);
     }
 
-    public void updateDoctorAvailable(String doctorId, Map map, SuccessListener listener){
+    public void updateDoctor(String doctorId, Map map, SuccessListener listener){
         fireBase.updateDoctor(doctorId,map,listener);
     }
 
@@ -91,6 +92,14 @@ public class Model {
 
     public void isPatientExist(String doctorId,String patientId,SuccessListener listener){
         fireBase.isPatientExist(doctorId,patientId,listener);
+    }
+
+    public interface HashMapListener {
+        void onComplete (HashMap<String,String> map);
+    }
+
+    public void getCurrentPatient(String doctorId, HashMapListener listener){
+        fireBase.getCurrentPatient(doctorId,listener);
     }
 
 

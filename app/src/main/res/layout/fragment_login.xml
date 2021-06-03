@@ -10,9 +10,8 @@
     <Button
         android:id="@+id/login_signup_btn"
         style="@style/Widget.AppCompat.Button.Borderless"
-        android:layout_width="0dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="16dp"
+        android:layout_width="309dp"
+        android:layout_height="50dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="50dp"
         android:background="@drawable/custom_border"
@@ -21,21 +20,6 @@
         android:text="Sign Up"
         android:textColor="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/login_forgot_btn"
-        app:layout_constraintTop_toBottomOf="@+id/login_signin_btn" />
-
-    <Button
-        android:id="@+id/login_forgot_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="49dp"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/custom_border"
-        android:backgroundTint="#4CAF50"
-        android:text="Forgot Password?"
-        android:textColor="#FFFFFF"
-        android:textSize="12sp"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/login_signin_btn" />
 
     <EditText

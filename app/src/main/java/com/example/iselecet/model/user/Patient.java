@@ -9,6 +9,7 @@ public class Patient extends User{
 
     SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
     Date date = new Date();
+    
 
     private Boolean isWaiting = false;
 

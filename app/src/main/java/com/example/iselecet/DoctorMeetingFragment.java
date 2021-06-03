@@ -10,7 +10,6 @@ import android.os.Build;
 import android.os.Bundle;
 
 import androidx.core.app.NotificationCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -134,7 +133,7 @@ public class DoctorMeetingFragment extends Fragment {
                                                 patient.setArrivedAt(formatter.format(date));
                                                 editDoctorMap.put("currentPatient",patient);
                                                 editDoctorMap.put("isAvailable",false);
-                                                Model.instance.updateDoctorAvailable(doctorId, editDoctorMap, new Model.SuccessListener() {
+                                                Model.instance.updateDoctor(doctorId, editDoctorMap, new Model.SuccessListener() {
                                                     @Override
                                                     public void onComplete(boolean result) {
                                                         if (result) {
@@ -152,7 +151,7 @@ public class DoctorMeetingFragment extends Fragment {
                                                 patient.setArrivedAt(formatter.format(date));
                                                 patientArrayList.add(patient);
                                                 editDoctorMap.put("patientList", patientArrayList);
-                                                Model.instance.updateDoctorAvailable(doctorId, editDoctorMap, new Model.SuccessListener() {
+                                                Model.instance.updateDoctor(doctorId, editDoctorMap, new Model.SuccessListener() {
                                                     @Override
                                                     public void onComplete(boolean result) {
                                                         if (result) {
@@ -210,7 +209,7 @@ public class DoctorMeetingFragment extends Fragment {
                                     patientHashMap.put("isAvailable",true);
                                 }
                                 patientHashMap.put("patientList",patientArrayList);
-                                Model.instance.updateDoctorAvailable(doctorId, patientHashMap, new Model.SuccessListener() {
+                                Model.instance.updateDoctor(doctorId, patientHashMap, new Model.SuccessListener() {
                                     @Override
                                     public void onComplete(boolean result) {
                                         if(result){
@@ -246,6 +245,64 @@ public class DoctorMeetingFragment extends Fragment {
             @Override
             public void onRefresh() {
                 swipeRefreshLayout.setRefreshing(true);
+                Model.instance.getCurrentPatient(doctorId, new Model.HashMapListener() {
+                    @Override
+                    public void onComplete(HashMap map) {
+                        String arrivedAt = (String)map.get("arrivedAt");
+                        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+                        Date date1 = new Date(); //Time of system
+                        try{
+                        Date date2 = formatter.parse(arrivedAt); //the time that the current user arrived
+                            long difference_In_Time
+                                    = date1.getTime() - date2.getTime();
+                            long difference_In_Minutes
+                                    = (difference_In_Time
+                                    / (1000 * 60))
+                                    % 60;
+                            editDoctorMap = new HashMap<>();
+                            if(difference_In_Minutes>10){
+
+                                Model.instance.getDoctorWaitingList(doctorId, new Model.ListListener() {
+                                    @Override
+                                    public void onComplete(ArrayList result) {
+                                        if(result.size()==0){
+                                            editDoctorMap.put("currentPatient",null);
+                                            editDoctorMap.put("isAvailable",true);
+                                            Model.instance.updateDoctor(doctorId, editDoctorMap, new Model.SuccessListener() {
+                                                @Override
+                                                public void onComplete(boolean result) {
+
+                                                }
+                                            });
+                                        }
+                                        else{
+                                            Patient current = (Patient)result.get(0);
+                                            editDoctorMap.put("currentPatient",current);
+                                            result.remove(0);
+                                            if(result.size()==0){
+                                                editDoctorMap.put("patientList",null);
+                                            }
+                                            editDoctorMap.put("patientList",result);
+                                            Model.instance.updateDoctor(doctorId, editDoctorMap, new Model.SuccessListener() {
+                                                @Override
+                                                public void onComplete(boolean result) {
+
+                                                }
+                                            });
+                                        }
+                                    }
+                                });
+
+                            }
+
+                        }
+                        catch (Exception e){
+                            e.printStackTrace();
+                        }
+
+
+                    }
+                });
                 Model.instance.getDoctorWaitingList(doctorId, new Model.ListListener() {
                     @Override
                     public void onComplete(ArrayList result) {

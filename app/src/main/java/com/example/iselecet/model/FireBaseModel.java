@@ -225,12 +225,15 @@ public class FireBaseModel {
                         if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
                             ArrayList<HashMap<String,String>> hashList = (ArrayList<HashMap<String, String>>) document.get("patientList");
-                            for(HashMap<String,String> m:hashList){
-                                Patient tmpPatient = new Patient(m.get("email"),m.get("role"),m.get("fullName"));
-                                tmpPatient.setId(m.get("id"));
-                                tmpPatient.setArrivedAt(m.get("arrivedAt"));
-                                patientList.add(tmpPatient);
+                            if(hashList!=null){
+                                for(HashMap<String,String> m:hashList){
+                                    Patient tmpPatient = new Patient(m.get("email"),m.get("role"),m.get("fullName"));
+                                    tmpPatient.setId(m.get("id"));
+                                    tmpPatient.setArrivedAt(m.get("arrivedAt"));
+                                    patientList.add(tmpPatient);
+                                }
                             }
+
                         }
                         listener.onComplete(patientList);
                     }
@@ -253,12 +256,14 @@ public class FireBaseModel {
                             }
                            }
                             ArrayList<HashMap<String,String>> hashList = (ArrayList<HashMap<String, String>>) document.get("patientList");
-                            for(HashMap<String,String> patient:hashList){
-                                if(patient.get("id").equals(patientId)){
-                                    flag = true;
+                            if(hashList!=null){
+                                for(HashMap<String,String> patient:hashList){
+                                    if(patient.get("id").equals(patientId)){
+                                        flag = true;
+                                    }
                                 }
-
                             }
+
                             if(flag){
                                 listener.onComplete(true);
                             }
@@ -269,6 +274,26 @@ public class FireBaseModel {
 
                     }
                 });
+    }
+
+    public void getCurrentPatient(String doctorId, Model.HashMapListener listener) {
+        db.collection("Doctors").document(doctorId).get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot doc = task.getResult();
+                            Doctor doctor = new Doctor();
+                            doctor.fromMap(doc.getData());
+                            HashMap<String,String> currentPatient = doctor.getCurrentPatient();
+                            if(currentPatient==null){
+                                currentPatient = new HashMap<>();
+                            }
+                            listener.onComplete(currentPatient);
+                        }
+                    }
+                });
+
     }
 
 

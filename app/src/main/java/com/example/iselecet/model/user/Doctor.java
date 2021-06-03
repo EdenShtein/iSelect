@@ -14,9 +14,14 @@ public class Doctor extends User {
         super(email, role, fullName);
         this.isAvailable = true;
         this.patientList = new ArrayList<>();
+        this.currentPatient = new HashMap();
     }
 
-    public Doctor(){}
+    public Doctor(){
+        this.isAvailable = true;
+        this.patientList = new ArrayList<>();
+        this.currentPatient = new HashMap();
+    }
 
 
     @Override
