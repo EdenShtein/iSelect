@@ -22,8 +22,11 @@ import com.example.iselecet.model.user.Patient;
 import com.example.iselecet.model.user.adapters.DoctorAdapter;
 import com.example.iselecet.model.user.adapters.PatientAdapter;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 
 
 public class DoctorViewFragment extends Fragment {
@@ -37,6 +40,8 @@ public class DoctorViewFragment extends Fragment {
     String doctor_id;
 
     ImageView signout;
+
+    Map<String, Object> editDoctorMap;
 
     ArrayList<Patient> patientsList;
 
@@ -81,13 +86,88 @@ public class DoctorViewFragment extends Fragment {
             @Override
             public void onRefresh() {
                 swipeRefreshLayout.setRefreshing(true);
-                Model.instance.getDoctorWaitingList(doctor_id, new Model.ListListener() {
+                Model.instance.getCurrentPatient(doctor_id, new Model.HashMapListener() {
                     @Override
-                    public void onComplete(ArrayList result) {
-                        patientAdapter.setPatientData(result);
-                        patient_list.setAdapter(patientAdapter);
+                    public void onComplete(HashMap map) {
+                        String arrivedAt = (String)map.get("arrivedAt");
+                        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+                        Date date1 = new Date(); //Time of system
+                        try{
+                            Date date2 = formatter.parse(arrivedAt); //the time that the current user arrived
+                            long difference_In_Time
+                                    = date1.getTime() - date2.getTime();
+                            long difference_In_Minutes
+                                    = (difference_In_Time
+                                    / (1000 * 60))
+                                    % 60;
+                            long difference_In_Hours
+                                    = (difference_In_Time
+                                    / (1000 * 60 * 60))
+                                    % 24;
+                            editDoctorMap = new HashMap<>();
+                            if(difference_In_Minutes>5 || difference_In_Hours >0){
+
+                                Model.instance.getDoctorWaitingList(doctor_id, new Model.ListListener() {
+                                    @Override
+                                    public void onComplete(ArrayList result) {
+                                        if(result.size()==0){
+                                            editDoctorMap.put("currentPatient",null);
+                                            editDoctorMap.put("isAvailable",true);
+                                            Model.instance.updateDoctor(doctor_id, editDoctorMap, new Model.SuccessListener() {
+                                                @Override
+                                                public void onComplete(boolean result) {
+                                                    if(result){
+                                                        Model.instance.getDoctorWaitingList(doctor_id, new Model.ListListener() {
+                                                            @Override
+                                                            public void onComplete(ArrayList result) {
+                                                                patientAdapter.setPatientData(result);
+                                                                patient_list.setAdapter(patientAdapter);
+                                                            }
+                                                        });
+                                                    }
+
+                                                }
+                                            });
+                                        }
+                                        else{
+                                            Patient current = (Patient)result.get(0);
+                                            Date date = new Date();
+                                            current.setArrivedAt(formatter.format(date));
+                                            editDoctorMap.put("currentPatient",current);
+                                            result.remove(0);
+                                            if(result.size()==0){
+                                                editDoctorMap.put("patientList",null);
+                                            }
+                                            editDoctorMap.put("patientList",result);
+                                            Model.instance.updateDoctor(doctor_id, editDoctorMap, new Model.SuccessListener() {
+                                                @Override
+                                                public void onComplete(boolean result) {
+                                                    if (result){
+                                                        Model.instance.getDoctorWaitingList(doctor_id, new Model.ListListener() {
+                                                            @Override
+                                                            public void onComplete(ArrayList result) {
+                                                                patientAdapter.setPatientData(result);
+                                                                patient_list.setAdapter(patientAdapter);
+                                                            }
+                                                        });
+                                                    }
+                                                }
+                                            });
+                                        }
+                                    }
+                                });
+
+                            }
+
+                        }
+                        catch (Exception e){
+                            e.printStackTrace();
+                        }
+
+
                     }
                 });
+
 
 
                 swipeRefreshLayout.setRefreshing(false);

@@ -150,6 +150,11 @@ public class DoctorMeetingFragment extends Fragment {
                                                 Date date = new Date();
                                                 patient.setArrivedAt(formatter.format(date));
                                                 patientArrayList.add(patient);
+                                                if(patientArrayList.size()==1){
+                                                    Intent intent = new Intent(getActivity().getApplicationContext(), MainActivity.class);
+                                                    showNotification(getContext(),"You Are Next!"
+                                                            ,intent);
+                                                }
                                                 editDoctorMap.put("patientList", patientArrayList);
                                                 Model.instance.updateDoctor(doctorId, editDoctorMap, new Model.SuccessListener() {
                                                     @Override
@@ -259,8 +264,12 @@ public class DoctorMeetingFragment extends Fragment {
                                     = (difference_In_Time
                                     / (1000 * 60))
                                     % 60;
+                            long difference_In_Hours
+                                    = (difference_In_Time
+                                    / (1000 * 60 * 60))
+                                    % 24;
                             editDoctorMap = new HashMap<>();
-                            if(difference_In_Minutes>10){
+                            if(difference_In_Minutes>5 || difference_In_Hours >0){
 
                                 Model.instance.getDoctorWaitingList(doctorId, new Model.ListListener() {
                                     @Override
@@ -271,12 +280,22 @@ public class DoctorMeetingFragment extends Fragment {
                                             Model.instance.updateDoctor(doctorId, editDoctorMap, new Model.SuccessListener() {
                                                 @Override
                                                 public void onComplete(boolean result) {
-
+                                                    if(result){
+                                                        Model.instance.getDoctorWaitingList(doctorId, new Model.ListListener() {
+                                                            @Override
+                                                            public void onComplete(ArrayList result) {
+                                                                patientAdapter.setPatientData(result);
+                                                                patient_list.setAdapter(patientAdapter);
+                                                            }
+                                                        });
+                                                    }
                                                 }
                                             });
                                         }
                                         else{
                                             Patient current = (Patient)result.get(0);
+                                            Date date = new Date();
+                                            current.setArrivedAt(formatter.format(date));
                                             editDoctorMap.put("currentPatient",current);
                                             result.remove(0);
                                             if(result.size()==0){
@@ -286,7 +305,15 @@ public class DoctorMeetingFragment extends Fragment {
                                             Model.instance.updateDoctor(doctorId, editDoctorMap, new Model.SuccessListener() {
                                                 @Override
                                                 public void onComplete(boolean result) {
-
+                                                    if(result){
+                                                        Model.instance.getDoctorWaitingList(doctorId, new Model.ListListener() {
+                                                            @Override
+                                                            public void onComplete(ArrayList result) {
+                                                                patientAdapter.setPatientData(result);
+                                                                patient_list.setAdapter(patientAdapter);
+                                                            }
+                                                        });
+                                                    }
                                                 }
                                             });
                                         }
@@ -303,13 +330,7 @@ public class DoctorMeetingFragment extends Fragment {
 
                     }
                 });
-                Model.instance.getDoctorWaitingList(doctorId, new Model.ListListener() {
-                    @Override
-                    public void onComplete(ArrayList result) {
-                        patientAdapter.setPatientData(result);
-                        patient_list.setAdapter(patientAdapter);
-                    }
-                });
+
 
 
                 swipeRefreshLayout.setRefreshing(false);
